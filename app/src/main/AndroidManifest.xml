@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Voice capture -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Calendar execution -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
+    <!-- Reminder notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Contact lookup for messages -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- Direct SMS sending for scheduled messaging -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
+    <!-- Optional direct call on explicit user button tap -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <!-- Restore scheduled actions after reboot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Package visibility for Calendar app interaction -->
+    <queries>
+        <package android:name="com.google.android.calendar" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="content" android:host="com.android.calendar" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".EchoFlowApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EchoFlow"
+        tools:targetApi="34">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.EchoFlow"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.ASSIST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- Reminder broadcast receiver -->
+        <receiver
+            android:name=".execution.ReminderReceiver"
+            android:exported="false" />
+
+        <!-- Reminder actions broadcast receiver (Start Now, Snooze, Dismiss) -->
+        <receiver
+            android:name=".execution.ReminderActionReceiver"
+            android:exported="false" />
+
+        <!-- Proactive call confirmation receiver -->
+        <receiver
+            android:name=".execution.CallConfirmationReceiver"
+            android:exported="false" />
+
+        <!-- Call notification actions receiver (Call Now, Snooze, Cancel) -->
+        <receiver
+            android:name=".execution.CallActionReceiver"
+            android:exported="false" />
+
+        <!-- Scheduled message trigger receiver -->
+        <receiver
+            android:name=".execution.ScheduledMessageReceiver"
+            android:exported="false" />
+
+        <!-- Message notification actions receiver (Open & Send) -->
+        <receiver
+            android:name=".execution.MessageActionReceiver"
+            android:exported="false" />
+
+        <!-- SMS delivery confirmation receiver -->
+        <receiver
+            android:name=".execution.SmsDeliveryReceiver"
+            android:exported="false" />
+
+        <!-- Notification Action Palette receiver (Cancel All, Cancel Single) -->
+        <receiver
+            android:name=".notification.PaletteActionReceiver"
+            android:exported="false" />
+
+        <!-- Boot receiver to restore scheduled actions after restart -->
+        <receiver
+            android:name=".scheduling.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+
+        <!-- Global gesture accessibility service -->
+        <service
+            android:name=".assistant.EchoFlowAccessibilityService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <!-- Quick Settings Tile -->
+        <service
+            android:name=".assistant.EchoFlowTileService"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="EchoFlow"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+
+</manifest>

@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">EchoFlow</string>
+    <string name="accessibility_service_description">EchoFlow uses Android Accessibility gesture detection only to recognize your four-finger swipe-down shortcut to activate the ambient assistant. It does not read, capture, or inspect the contents of other apps.</string>
+    <string name="accessibility_service_summary">Enables the four-finger swipe-down gesture trigger for EchoFlow.</string>
+</resources>
+
